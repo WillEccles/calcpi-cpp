@@ -1,6 +1,6 @@
 CC=g++
 SRC=main.cpp
-FLAGS=-std=c++11 -Os
+FLAGS=-std=c++11 -Os -stdlib=libc++
 OUTPUT=calcpi.o
 
 all:
