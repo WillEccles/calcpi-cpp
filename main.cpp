@@ -100,5 +100,12 @@ int main(int argc, char* argv[]) {
 
 	std::cout << "Answer: " << std::setprecision(precision) << answer;
 	printf(" (took %.2f seconds)\n", time_span.count());
+	
+	// clean up after ourselves
+	delete[] returns;
+	delete[] t;
+	delete[] p;
+	delete[] futures;
+
 	return 0;
 }

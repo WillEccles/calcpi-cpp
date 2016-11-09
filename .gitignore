@@ -1,2 +1,4 @@
 # ignore output files
 calcpi.o
+calcpi
+*.zip
