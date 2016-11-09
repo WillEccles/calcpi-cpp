@@ -59,6 +59,11 @@ int main(int argc, char* argv[]) {
 	if (threads <= 0)
 		threads = (int)std::thread::hardware_concurrency();
 
+	if (threads <= 0) { // this means that it couldn't figure out how many threads the system can have
+		printf("Warning: could not determine hardware concurrency. Please specify a specific number of threads. Will use one thread.\n");
+		threads = 1;
+	}
+
 	printf("Calculating pi over %lu iterations.\nUsing %d threads.\nPrecision: %d decimal places.\n", cycles, threads, precision);
 
 	high_resolution_clock::time_point t1 = high_resolution_clock::now();
