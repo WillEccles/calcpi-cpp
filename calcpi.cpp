@@ -40,12 +40,12 @@ void calcinrange(unsigned long start, unsigned long end, std::promise<long doubl
 
 int main(int argc, char* argv[]) {
 	int threads = 1;
-	int precision = 10;
+	int precision = 11; // this will be 10 decimal places. 1 is added for the 3
 	if (argc >= 4) {
 		precision = std::abs(atoi(argv[3]));
-		if (precision > 51) {
-			printf("Warning: %d is equivalent to a precision of 51.\n", precision);
-			precision = 51;
+		if (precision > 50) {
+			printf("Warning: %d is equivalent to a precision of 50.\n", precision);
+			precision = 51; // again, add one for 3
 		}
 		threads = atoi(argv[1]);
 		cycles = strtoul(argv[2], NULL, 10);
