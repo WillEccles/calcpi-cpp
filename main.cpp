@@ -56,6 +56,9 @@ int main(int argc, char* argv[]) {
 		threads = atoi(argv[1]);
 	}
 
+	if (threads <= 0)
+		threads = (int)std::thread::hardware_concurrency();
+
 	printf("Calculating pi over %lu iterations.\nUsing %d threads.\nPrecision: %d decimal places.\n", cycles, threads, precision);
 
 	high_resolution_clock::time_point t1 = high_resolution_clock::now();

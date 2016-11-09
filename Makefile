@@ -1,5 +1,5 @@
 CC=g++
-SRC=calcpi.cpp
+SRC=main.cpp
 FLAGS=-std=c++11 -Os
 OUTPUT=calcpi.o
 
