@@ -10,6 +10,7 @@
 #include <cmath>
 #include <iostream>
 #include <iomanip> // for std::setprecision()
+#include <vector>
 
 // for time stuff
 using namespace std::chrono;
@@ -64,13 +65,13 @@ int main(int argc, char* argv[]) {
 		threads = 1;
 	}
 
-	printf("Calculating pi over %lu iterations.\nUsing %d threads.\nPrecision: %d decimal places.\n", cycles, threads, precision);
+	printf("Calculating pi over %lu iterations.\nUsing %d threads.\nPrecision: %d decimal places.\n", cycles, threads, precision-1);
 
 	high_resolution_clock::time_point t1 = high_resolution_clock::now();
 
-	std::thread *t = new std::thread[threads];
-	std::promise<long double> *p = new std::promise<long double>[threads];
-	std::future<long double> *futures = new std::future<long double>[threads];
+	std::vector<std::thread> t(threads);
+	std::vector<std::promise<long double> > p(threads);
+	std::vector<std::future<long double> > futures(threads);
 	for (int i = 0; i < threads; i++)
 		futures[i] = p[i].get_future();
 
@@ -101,11 +102,5 @@ int main(int argc, char* argv[]) {
 	std::cout << "Answer: " << std::setprecision(precision) << answer;
 	printf(" (took %.2f seconds)\n", time_span.count());
 	
-	// clean up after ourselves
-	delete[] returns;
-	delete[] t;
-	delete[] p;
-	delete[] futures;
-
 	return 0;
 }
