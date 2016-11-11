@@ -11,27 +11,24 @@
 #include <iostream>
 #include <iomanip> // for std::setprecision()
 #include <vector>
+#include <cinttypes> // for std::uint_fast64_t
 
 // for time stuff
 using namespace std::chrono;
 
-// max of long double: LDBL_MAX
+std::uint_fast64_t cycles = UINT_FAST64_MAX;
 
-long double denominatorParts[3] = {2.0, 3.0, 4.0};
-long double pi = 3.0; // start with 3
-unsigned long cycles = ULONG_MAX;
-
-void calcinrange(unsigned long start, unsigned long end, std::promise<long double> && r, int TID) {
-	unsigned long cycle = start;
-	long double dParts[3] = {2.0+(long double)(start*2), 3.0+(long double)(start*2), 4.0+(long double)(start*2)};
-	long double pi = 0.0; // the smaller ones will start with 0, then they will all be added to 3 at the end
+void calcinrange(std::uint_fast64_t start, std::uint_fast64_t end, std::promise<long double> && r, int TID) {
+	std::uint_fast64_t cycle = start;
+	long double dParts[3] = {2.0l+(long double)(start*2), 3.0l+(long double)(start*2), 4.0l+(long double)(start*2)};
+	long double pi = 0.0l; // the smaller ones will start with 0, then they will all be added to 3 at the end
 	bool add = true;
 	while (cycle <= end) {
-		long double addend = 4.0/(dParts[0]*dParts[1]*dParts[2]);
+		long double addend = 4.0l/(dParts[0]*dParts[1]*dParts[2]);
 		if (add) pi += addend;
 		else pi -= addend;
 		for (int i = 0; i<3; i++)
-			dParts[i]+=2.0;
+			dParts[i]+=2.0l;
 		cycle++;
 		add = !add;
 	}
@@ -49,10 +46,10 @@ int main(int argc, char* argv[]) {
 			precision = 51; // again, add one for 3
 		}
 		threads = atoi(argv[1]);
-		cycles = strtoul(argv[2], NULL, 10);
+		sscanf(argv[2], "%" SCNuFAST64 "", &cycles);
 	} else if (argc == 3) {
 		threads = atoi(argv[1]);
-		cycles = strtoul(argv[2], NULL, 10);
+		sscanf(argv[2], "%" SCNuFAST64 "", &cycles);
 	} else if (argc == 2) {
 		threads = atoi(argv[1]);
 	}
@@ -65,7 +62,7 @@ int main(int argc, char* argv[]) {
 		threads = 1;
 	}
 
-	printf("Calculating pi over %lu iterations.\nUsing %d threads.\nPrecision: %d decimal places.\n", cycles, threads, precision-1);
+	printf("Calculating pi over %" PRIuFAST64 " iterations.\nUsing %d threads.\nPrecision: %d decimal places.\n", cycles, threads, precision-1);
 
 	high_resolution_clock::time_point t1 = high_resolution_clock::now();
 
@@ -77,10 +74,10 @@ int main(int argc, char* argv[]) {
 
 	for (int TID = 0; TID < threads; TID++) {
 		// first iteration is 0, then the last is 'cycles'
-		unsigned long start = 0+(TID*(cycles/threads));
-		unsigned long end = start+(cycles/threads)-1;
+		std::uint_fast64_t start = 0+(TID*(cycles/threads));
+		std::uint_fast64_t end = start+(cycles/threads)-1;
 		t[TID] = std::thread(calcinrange, start, end, std::move(p[TID]), TID);
-		printf("Thread %d: %lu to %lu\n", TID, start, end);
+		printf("Thread %d: %" PRIuFAST64 " to %" PRIuFAST64 "\n", TID, start, end);
 	}
 	printf("Started.\n");
 
@@ -92,7 +89,7 @@ int main(int argc, char* argv[]) {
 
 	printf("All threads completed.\n");
 
-	long double answer = 3.0;
+	long double answer = 3.0l;
 	for (int i = 0; i < threads; i++)
 		answer += returns[i];
 	
