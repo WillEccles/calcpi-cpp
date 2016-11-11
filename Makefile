@@ -1,10 +1,10 @@
 CC=g++
 SRC=main.cpp
-FLAGS=-std=c++11 -Os -stdlib=libc++
+FLAGS=-std=c++11 -O3 -stdlib=libc++ -fwhole-program -DNDEBUG -s
 OUTPUT=calcpi.o
 
 all:
-	$(CC) $(SRC) -o $(OUTPUT) $(FLAGS)
+	$(CC) $(SRC) -o $(OUTPUT) $(FLAGS) -march=native
 
 clean:
 	-rm calcpi.*
