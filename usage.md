@@ -3,7 +3,7 @@
 
 `threads` specifies how many threads should be used during the calculation. If the number is less than or equal to 0, it uses as many as it thinks your system is capable of. I recommend setting this to 0 unless you need to be able to do other things.
 
-`iterations` is how many iterations should be used during the calculation. Technically, the more you use, the more accurately it will guess Pi. The largest this number can be varies from system to system, but it's the maximum size of an unsigned long on your system (see `ULONG_MAX` from `limits.h` on your system). I recommend making this something like 10 million, 100 million, or a billion, but if you want to be accurate to more decimal places, you can increase this number.
+`iterations` is how many iterations should be used during the calculation. Technically, the more you use, the more accurately it will guess Pi. The biggest this can be is `2<sup>64</sup> - 1`, which is *not* what you should use. I recommend making this something like 10 million, 100 million, or a billion, but if you want to be accurate to more decimal places, you can increase this number.
 
 `decimal points` is the number of decimal points to display. This is 10 by default, and you can set it up to 50.
 
