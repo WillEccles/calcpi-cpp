@@ -36,19 +36,16 @@ void calcinrange(std::uint_fast64_t start, std::uint_fast64_t end, std::promise<
 int main(int argc, char* argv[]) {
 	int threads = 1;
 	int precision = 11; // this will be 10 decimal places. 1 is added for the 3
+	if (argc >= 2)
+		threads = std::atoi(argv[1]);
+	if (argc >= 3)
+		std::sscanf(argv[2], "%" SCNuFAST64 "", &cycles);
 	if (argc >= 4) {
-	    precision = std::abs(std::atoi(argv[3]));
+	    precision = std::abs(std::atoi(argv[3]))+1;
 		if (precision > 50) {
 			std::printf("Warning: %d is equivalent to a precision of 50.\n", precision);
 			precision = 51; // again, add one for 3
 		}
-		threads = std::atoi(argv[1]);
-		std::sscanf(argv[2], "%" SCNuFAST64 "", &cycles);
-	} else if (argc == 3) {
-		threads = std::atoi(argv[1]);
-		std::sscanf(argv[2], "%" SCNuFAST64 "", &cycles);
-	} else if (argc == 2) {
-		threads = std::atoi(argv[1]);
 	}
 
 	if (threads <= 0)
