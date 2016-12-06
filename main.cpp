@@ -17,19 +17,25 @@ std::uint_fast64_t cycles = UINT_FAST64_MAX;
 
 void calcinrange(std::uint_fast64_t start, std::uint_fast64_t end, std::promise<long double> && r, int TID) {
 	std::uint_fast64_t cycle = start;
-	long double dParts[3] = {2.0l+static_cast<long double>(start*2), 3.0l+static_cast<long double>(start*2), 4.0l+static_cast<long double>(start*2)};
+	long double s = 2.0l + static_cast<long double>(start*2);
+	long double den = s*(s+1.0l)*(s+2.0l);
+	long double v_6s2 = 6.0l*s*s;
+	long double v_24s = 24.0l*s;
 	long double pi = 0.0l; // the smaller ones will start with 0, then they will all be added to 3 at the end
 	bool add = true;
 	while (cycle <= end) {
-		long double addend = 4.0l/(dParts[0]*dParts[1]*dParts[2]);
-		if (add) pi += addend;
-		else pi -= addend;
-		for (int i = 0; i<3; i++)
-			dParts[i]+=2.0l;
-		cycle++;
-		add = !add;
+		long double den2 = den;
+		v_6s2 += v_24s + 24;
+		v_24s += 48;
+		den += v_6s2;
+		den2 *= den;  // This mult could also be removed
+		pi += v_6s2/den2;  // Only one division (per two cycles)!
+		v_6s2 += v_24s + 24;
+		v_24s += 48;
+		den += v_6s2;
+		cycle += 2;
 	}
-	r.set_value(pi);
+	r.set_value(4.0l*pi);  // Multiply the 4 only at the end...
 	std::printf("Thread %d done.\n", TID);
 }
 
