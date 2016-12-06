@@ -76,10 +76,16 @@ int main(int argc, char* argv[]) {
 	std::printf("Started.\n");
 
 	long double answer = 3.0l;
-	for (int i = 0; i < threads; i++) {
-		t[i].join();
-		answer += futures[i].get();
-	}
+	if ((cycles/threads)%2 == 0)
+		for (int i = 0; i < threads; i++) {
+			t[i].join();
+			answer += futures[i].get();
+		}
+	else
+		for (int i = 0, op = 1; i < threads; i++, op *= -1) {
+			t[i].join();
+			answer += static_cast<long double>(op) * futures[i].get();
+		}
 
 	std::printf("All threads completed.\n");
 
