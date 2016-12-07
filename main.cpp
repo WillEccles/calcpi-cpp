@@ -21,21 +21,35 @@ void calcinrange(std::uint_fast64_t start, std::uint_fast64_t end, std::promise<
 	long double den = s*(s+1.0l)*(s+2.0l);
 	long double v_6s2 = 6.0l*s*s;
 	long double v_24s = 24.0l*s;
-	long double pi = 0.0l; // the smaller ones will start with 0, then they will all be added to 3 at the end
-	bool add = true;
-	while (cycle <= end) {
+	long double pi = 0.0l; // the individual threads will start with 0, then they will all be added to 3 at the end
+	
+	// determine what should be used at the end: 4.0 or -4.0
+	// if the start value is odd, it should be a -4.0
+	long double sign;
+	if (start%2 == 0)
+		sign = 1.0l;
+	else sign = -1.0l;
+
+	// den
+	// den 2 = den + 6(x+2)^2
+	// at the end if cycle == end, add (1/den)
+	while (cycle < end) {
 		long double den2 = den;
 		v_6s2 += v_24s + 24;
 		v_24s += 48;
 		den += v_6s2;
-		den2 *= den;  // This mult could also be removed
-		pi += v_6s2/den2;  // Only one division (per two cycles)!
+		den2 *= den; // This mult could also be removed
+		pi += v_6s2/den2; // Only one division (per two cycles)!
 		v_6s2 += v_24s + 24;
 		v_24s += 48;
 		den += v_6s2;
 		cycle += 2;
 	}
-	r.set_value(4.0l*pi);  // Multiply the 4 only at the end...
+
+	if (cycle == end)
+		pi += (1/den);
+	
+	r.set_value(sign*4.0l*pi); // Multiply the 4 only at the end...
 	std::printf("Thread %d done.\n", TID);
 }
 
@@ -74,24 +88,20 @@ int main(int argc, char* argv[]) {
 
 	for (int TID = 0; TID < threads; TID++) {
 		// first iteration is 0, then the last is 'cycles'
-		std::uint_fast64_t start = 0+(TID*(cycles/threads));
+		std::uint_fast64_t start = (TID*(cycles/threads));
 		std::uint_fast64_t end = start+(cycles/threads)-1;
+		if (TID == threads-1)
+			end += cycles%threads; // account for leftovers
 		t[TID] = std::thread(calcinrange, start, end, std::move(p[TID]), TID);
 		std::printf("Thread %d: %" PRIuFAST64 " to %" PRIuFAST64 "\n", TID, start, end);
 	}
 	std::printf("Started.\n");
 
 	long double answer = 3.0l;
-	if ((cycles/threads)%2 == 0)
-		for (int i = 0; i < threads; i++) {
-			t[i].join();
-			answer += futures[i].get();
-		}
-	else
-		for (int i = 0, op = 1; i < threads; i++, op *= -1) {
-			t[i].join();
-			answer += static_cast<long double>(op) * futures[i].get();
-		}
+	for (int i = 0; i < threads; i++) {
+		t[i].join();
+		answer += futures[i].get();
+	}
 
 	std::printf("All threads completed.\n");
 

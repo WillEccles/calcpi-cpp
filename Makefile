@@ -11,5 +11,5 @@ clean:
 
 # used to create releases for github.com/willeccles/calcpi-cpp
 release:
-	$(CC) $(SRC) -o calcpi $(FLAGS)
+	$(CXX) $(SRC) -o calcpi $(FLAGS)
 	zip calcpi.zip calcpi
