@@ -8,6 +8,6 @@
 `decimal points` is the number of decimal points to display. This is 10 by default, and you can set it up to 50.
 
 ### Installation:
-If you download the `calcpi` binary provided, it may not work if you aren't on unix. If it doesn't work (this is a possibility depending on your system), you can compile the code yourself using your preferred compiler. The provided binary was compiled on macOS 10.12 Sierra, 64-bit, using g++ (aliased to clang) using the following flags: `-std=c++14 -stdlib=libc++ -O3 -fwhole-program -s -DNDEBUG`
+As of version 2.1.0, there will no longer be a binary supplied for releases. This is because it will be less efficient (if it works at all) on other processors, and you *should* compile this program yourself.
 
-If this does not run for you and you have g++ installed, you can clone the repo and run `make`. If you do not have g++, you should look into how to use your preferred compiler to compile it. You'll need at least C++11 support.
+In order to compile this program, download the supplied source, then run `make` inside the extracted folder. This should supply you with a file called `calcpi.o` (or `calcpi.exe` if you use MinGW or similar). You can then run that according to the usage information above.
