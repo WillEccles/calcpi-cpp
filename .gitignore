@@ -2,3 +2,9 @@
 calcpi.o
 calcpi
 *.zip
+
+\.idea/
+
+cmake-build-debug/
+
+CMakeLists\.txt
