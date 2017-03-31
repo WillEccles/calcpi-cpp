@@ -1,6 +1,5 @@
 #include <cstdio>
 #include <cstdlib>
-// these two are to get maximums
 #include <thread>
 #include <future>
 #include <cmath>
