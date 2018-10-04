@@ -6,8 +6,8 @@ all: $(SRC)
 	$(CXX) $< -o $(OUTPUT) $(FLAGS) -march=native
 
 clean:
-	-rm calcpi.*
-	-rm calcpi
+	-rm -f calcpi.*
+	-rm -f calcpi
 
 # used to create releases for github.com/willeccles/calcpi-cpp
 release:
