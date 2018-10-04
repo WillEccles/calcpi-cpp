@@ -62,6 +62,30 @@
 			],
 			"group": "test",
 			"problemMatcher": []
+		},
+		{
+			"label": "run (1B)",
+			"type": "shell",
+			"command": "./calcpi.o",
+			"args": [
+				"0",
+				"1000000000",
+				"10"
+			],
+			"group": "test",
+			"problemMatcher": []
+		},
+		{
+			"label": "run (1T)",
+			"type": "shell",
+			"command": "./calcpi.o",
+			"args": [
+				"0",
+				"1000000000000",
+				"10"
+			],
+			"group": "test",
+			"problemMatcher": []
 		}
 	]
 }
