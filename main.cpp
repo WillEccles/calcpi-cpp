@@ -52,6 +52,7 @@ void calcinrange(std::uint_fast64_t start, std::uint_fast64_t end, std::promise<
 }
 
 int main(int argc, char* argv[]) {
+	const unsigned int maxdigits = sizeof(long double) == 128 ? 33 : 15;
     int threads = 1;
     int precision = 11; // this will be 10 decimal places. 1 is added for the 3
     if (argc >= 2)
@@ -59,10 +60,10 @@ int main(int argc, char* argv[]) {
     if (argc >= 3)
         std::sscanf(argv[2], "%" SCNuFAST64 "", &cycles);
     if (argc >= 4) {
-        precision = std::abs(std::atoi(argv[3]))+1;
-        if (precision > 50) {
-            std::printf("Warning: %d is equivalent to a precision of 50.\n", precision);
-            precision = 51; // again, add one for 3
+        precision = std::abs(std::atoi(argv[3]));
+        if (precision > maxdigits) {
+            std::printf("Warning: %d is equivalent to a precision of %d.\n", precision, maxdigits);
+            precision = maxdigits; // again, add one for 3
         }
     }
 
