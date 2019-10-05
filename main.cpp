@@ -61,7 +61,7 @@ int main(int argc, char* argv[]) {
         std::sscanf(argv[2], "%" SCNuFAST64 "", &cycles);
     if (argc >= 4) {
         precision = std::abs(std::atoi(argv[3]));
-        if (precision > maxdigits) {
+        if ((unsigned int)precision > maxdigits) {
             std::printf("Warning: %d is equivalent to a precision of %d.\n", precision, maxdigits);
             precision = maxdigits; // again, add one for 3
         }
