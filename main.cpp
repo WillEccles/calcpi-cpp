@@ -1,12 +1,13 @@
+#include <cinttypes> // for std::uint_fast64_t
+#include <cmath>
 #include <cstdio>
 #include <cstdlib>
-#include <thread>
 #include <future>
-#include <cmath>
-#include <iostream>
 #include <iomanip> // for std::setprecision()
+#include <iostream>
+#include <limits>
+#include <thread>
 #include <vector>
-#include <cinttypes> // for std::uint_fast64_t
 
 // for time stuff
 using namespace std::chrono;
@@ -52,7 +53,7 @@ void calcinrange(std::uint_fast64_t start, std::uint_fast64_t end, std::promise<
 }
 
 int main(int argc, char* argv[]) {
-	const unsigned int maxdigits = sizeof(long double) == 128 ? 33 : 15;
+  const auto maxdigits = std::numeric_limits<long double>::max_digits10;
     int threads = 1;
     int precision = 11; // this will be 10 decimal places. 1 is added for the 3
     if (argc >= 2)
@@ -62,7 +63,7 @@ int main(int argc, char* argv[]) {
     if (argc >= 4) {
         precision = std::abs(std::atoi(argv[3]));
         if ((unsigned int)precision > maxdigits) {
-            std::printf("Warning: %d is equivalent to a precision of %d.\n", precision, maxdigits);
+            std::printf("Warning: precision %d coerced to %d.\n", precision, maxdigits);
             precision = maxdigits; // again, add one for 3
         }
     }
